@@ -9,6 +9,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import org.koin.java.KoinJavaComponent.inject
 import org.litote.kmongo.eq
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,12 +17,8 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNotNull
 
 class ApplicationTest {
-
     @Test
     fun registration() = testApplication {
-        application {
-        }
-
         val email = getRandomString(15) + "_test@gleb.at"
         val password = getRandomString(14)
 
@@ -61,21 +58,21 @@ class ApplicationTest {
         val obj2: User = testResp2.toObj(User::class.java)
 
         assertEquals(obj2.email, email)
-
-        Cols.users.deleteOne(UserDto::_id eq obj2._id)
+        val cols: Cols by inject(Cols::class.java)
+        cols.users.deleteOne(UserDto::_id eq obj2._id)
 
     }
 
     @Test
     fun login() = testApplication {
-        application {
-        }
         val email = getRandomString(15) + "_test@gleb.at"
         val password = getRandomString(14)
 
-        val user = UserDto(email = email, password = password.hashPassword())
-        Cols.users.insertOne(user)
-
+        application {
+            val user = UserDto(email = email, password = password.hashPassword())
+            val cols: Cols by inject(Cols::class.java)
+            cols.users.insertOne(user)
+        }
 
         client.post("/auth/login") {
             setBody("{'email':'$email','password':'$password'}")

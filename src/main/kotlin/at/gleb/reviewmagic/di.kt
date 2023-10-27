@@ -1,6 +1,7 @@
 package at.gleb.reviewmagic
 
 
+import at.gleb.reviewmagic.auth.AuthInteractor
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.turbo.MarkerFilter
@@ -32,6 +33,14 @@ fun Application.appModule(): Module {
         single {
             val dbName = getEnv("ktor.mongodb.db_name")
             get<MongoClient>().getDatabase(dbName)
+        }
+
+        single {
+            Cols(get())
+        }
+
+        single {
+            AuthInteractor(get())
         }
 
         /*single {

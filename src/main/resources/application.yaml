@@ -1,0 +1,23 @@
+ktor:
+  development: true
+  deployment:
+    port: "$PORT:8080"
+
+  application:
+    modules:
+      - at.gleb.ApplicationKt.module
+
+  mongodb:
+    #development db url
+    db_url: "$MONGO_DB_URL:mongodb+srv://info:HYrLNyfE3rvGvlzD@cluster0.uycwv9j.mongodb.net/?retryWrites=true&w=majority"
+    db_name: "$MONGO_DB_NAME:dev_review_magic"
+
+  settings:
+    dev: "$DEV:0"
+
+  jwt:
+    secret: "$JWT_SECRET:saAWEfsadfwef_sdfew32354"
+    issuer: "$JWT_ISSUER:http://0.0.0.0:8080/"
+    audience: "$JWT_AUDIENCE:http://0.0.0.0:8080/hello"
+    realm: "$JWT_REALM:Access to client console"
+

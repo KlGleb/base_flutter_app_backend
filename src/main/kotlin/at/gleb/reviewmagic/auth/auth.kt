@@ -10,20 +10,23 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import org.koin.java.KoinJavaComponent.inject
 import org.litote.kmongo.eq
 import org.litote.kmongo.findOne
 
 const val AUTH_JWT = "auth-jwt"
 
+private val cols: Cols by inject(Cols::class.java)
+private val interactor: AuthInteractor by inject(AuthInteractor::class.java)
 fun Application.configureAuth() {
 
-    val secret = environment.config.property("jwt.secret").getString()
-    val issuer = environment.config.property("jwt.issuer").getString()
-    val audience = environment.config.property("jwt.audience").getString()
-    val myRealm = environment.config.property("jwt.realm").getString()
+    val secret = environment.config.property("ktor.jwt.secret").getString()
+    val issuer = environment.config.property("ktor.jwt.issuer").getString()
+    val audience = environment.config.property("ktor.jwt.audience").getString()
+    val myRealm = environment.config.property("ktor.jwt.realm").getString()
 
     install(Authentication) {
-        jwt (AUTH_JWT){
+        jwt(AUTH_JWT) {
             realm = myRealm
             verifier(
                 JWT
@@ -48,11 +51,22 @@ fun Application.configureAuth() {
     routing {
         route("/auth") {
             post<LoginInput>("/login") {
-                call.respond(hashMapOf("token" to it.provideToken(audience, issuer, secret)))
+                call.respond(hashMapOf("token" to interactor.provideToken(it, audience, issuer, secret)))
             }
 
             post<RegisterInput>("/register") {
-                call.respond(hashMapOf("token" to it.register(audience, issuer, secret)))
+                call.respond(hashMapOf("token" to interactor.register(it, audience, issuer, secret)))
+            }
+
+            //send code to email
+            post<String>("/reset") {
+                interactor.sendResetPasswordCode(it, audience, issuer, secret)
+                call.respond(true)
+            }
+
+            //change password
+            put<ResetPasswordInput>("/reset") {
+                call.respond(hashMapOf("token" to interactor.resetPassword(it, audience, issuer, secret)))
             }
 
             authenticate(AUTH_JWT) {
@@ -61,7 +75,7 @@ fun Application.configureAuth() {
                 }
 
                 delete("/") {
-                    deleteUser(call.user)
+                    interactor.deleteUser(call.user)
                     call.respond(true)
                 }
             }
@@ -69,8 +83,9 @@ fun Application.configureAuth() {
     }
 }
 
-val ApplicationCall.user: UserDto get() {
-    val principal = principal<JWTPrincipal>()
-    val userId = principal!!.payload.getClaim("id").asString()
-    return Cols.users.findOne(UserDto::_id eq userId)!!
-}
+val ApplicationCall.user: UserDto
+    get() {
+        val principal = principal<JWTPrincipal>()
+        val userId = principal!!.payload.getClaim("id").asString()
+        return cols.users.findOne(UserDto::_id eq userId)!!
+    }
