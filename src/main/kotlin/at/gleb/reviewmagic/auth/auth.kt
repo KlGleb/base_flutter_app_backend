@@ -4,15 +4,16 @@ import at.gleb.reviewmagic.Cols
 import at.gleb.reviewmagic.data.dto.UserDto
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.mongodb.client.model.Filters
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.flow.first
+import org.bson.types.ObjectId
 import org.koin.java.KoinJavaComponent.inject
-import org.litote.kmongo.eq
-import org.litote.kmongo.findOne
 
 const val AUTH_JWT = "auth-jwt"
 
@@ -71,21 +72,15 @@ fun Application.configureAuth() {
 
             authenticate(AUTH_JWT) {
                 get("/test") {
-                    call.respond(call.user)
-                }
-
-                delete("/") {
-                    interactor.deleteUser(call.user)
-                    call.respond(true)
+                    call.respond(call.user())
                 }
             }
         }
     }
 }
 
-val ApplicationCall.user: UserDto
-    get() {
-        val principal = principal<JWTPrincipal>()
-        val userId = principal!!.payload.getClaim("id").asString()
-        return cols.users.findOne(UserDto::_id eq userId)!!
-    }
+suspend fun ApplicationCall.user():UserDto {
+    val principal = principal<JWTPrincipal>()
+    val userId = principal!!.payload.getClaim("id").asString()
+    return cols.users.find(Filters.eq("_id", ObjectId(userId))).first()
+}

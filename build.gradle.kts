@@ -41,14 +41,13 @@ dependencies {
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-    implementation("org.litote.kmongo:kmongo:4.8.0")
-    implementation("org.litote.kmongo:kmongo-coroutine:4.8.0")
-
     implementation("io.ktor:ktor-serialization-gson:$ktor_version")
     implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
 
     // Koin for Ktor
     implementation("io.insert-koin:koin-ktor:3.3.1")
+
+    implementation("org.mongodb:mongodb-driver-kotlin-coroutine:4.11.0")
 
 
     testImplementation("io.ktor:ktor-server-tests-jvm")

@@ -2,14 +2,14 @@ package at.gleb.reviewmagic
 
 
 import at.gleb.reviewmagic.auth.AuthInteractor
+import at.gleb.reviewmagic.auth.UserDataSource
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.turbo.MarkerFilter
-import com.mongodb.client.MongoClient
+import com.mongodb.kotlin.client.coroutine.MongoClient
 import io.ktor.server.application.*
 import org.koin.core.module.Module
 import org.koin.dsl.module
-import org.litote.kmongo.KMongo
 import org.slf4j.LoggerFactory
 
 
@@ -28,7 +28,8 @@ fun Application.appModule(): Module {
             }
 
             val mongoDbUrl = getEnv("ktor.mongodb.db_url")
-            KMongo.createClient(mongoDbUrl)
+            MongoClient.create(mongoDbUrl)
+
         }
         single {
             val dbName = getEnv("ktor.mongodb.db_name")
@@ -37,6 +38,10 @@ fun Application.appModule(): Module {
 
         single {
             Cols(get())
+        }
+
+        single {
+            UserDataSource(get())
         }
 
         single {

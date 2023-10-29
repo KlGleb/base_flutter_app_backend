@@ -5,12 +5,14 @@ import at.gleb.reviewmagic.data.dto.UserDto
 import at.gleb.reviewmagic.utils.getRandomString
 import at.gleb.reviewmagic.utils.hashPassword
 import com.google.gson.Gson
+import com.mongodb.client.model.Filters
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import kotlinx.coroutines.runBlocking
+import org.bson.types.ObjectId
 import org.koin.java.KoinJavaComponent.inject
-import org.litote.kmongo.eq
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
@@ -53,13 +55,13 @@ class ApplicationTest {
             }
         }
 
-        data class User(val _id: String, val email: String)
+        data class User(val id: ObjectId, val email: String)
 
         val obj2: User = testResp2.toObj(User::class.java)
 
         assertEquals(obj2.email, email)
         val cols: Cols by inject(Cols::class.java)
-        cols.users.deleteOne(UserDto::_id eq obj2._id)
+        cols.users.deleteOne(Filters.eq(UserDto::id.name, obj2.id))
 
     }
 
@@ -69,9 +71,11 @@ class ApplicationTest {
         val password = getRandomString(14)
 
         application {
-            val user = UserDto(email = email, password = password.hashPassword())
-            val cols: Cols by inject(Cols::class.java)
-            cols.users.insertOne(user)
+            runBlocking {
+                val user = UserDto(email = email, password = password.hashPassword())
+                val cols: Cols by inject(Cols::class.java)
+                cols.users.insertOne(user)
+            }
         }
 
         client.post("/auth/login") {
@@ -88,7 +92,6 @@ class ApplicationTest {
 
     }
 }
-
 
 suspend fun <T> HttpResponse.toObj(c: Class<T>): T {
     val gson = Gson()

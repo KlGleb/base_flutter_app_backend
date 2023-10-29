@@ -30,6 +30,7 @@ object ErrorCodes {
     const val CODE_EXPIRED = "code_expired"
     const val TOO_MANY_EMAIL_SENT = "too_many_email_sent"
     const val TOO_MANY_TRIES = "too_many_tries"
+    const val NOT_FOUND  = "not_found"
 }
 
 
@@ -84,6 +85,12 @@ class TooManyTries : MyException(
     "Too many tries",
     ErrorCodes.TOO_MANY_TRIES,
     HttpStatusCode.Unauthorized
+)
+
+class NotFound : MyException(
+    "Object not found",
+    ErrorCodes.NOT_FOUND,
+    HttpStatusCode.NotFound
 )
 
 
