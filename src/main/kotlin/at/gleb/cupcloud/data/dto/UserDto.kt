@@ -1,4 +1,4 @@
-package at.gleb.reviewmagic.data.dto
+package at.gleb.cupcloud.data.dto
 
 import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.codecs.pojo.annotations.BsonProperty

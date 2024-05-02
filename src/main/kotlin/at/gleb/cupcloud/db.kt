@@ -1,8 +1,8 @@
-package at.gleb.reviewmagic
+package at.gleb.cupcloud
 
-import at.gleb.reviewmagic.data.dto.CompanyDto
-import at.gleb.reviewmagic.data.dto.QrCodeDto
-import at.gleb.reviewmagic.data.dto.UserDto
+import at.gleb.cupcloud.data.dto.CompanyDto
+import at.gleb.cupcloud.data.dto.QrCodeDto
+import at.gleb.cupcloud.data.dto.UserDto
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
 import com.mongodb.kotlin.client.coroutine.MongoCollection

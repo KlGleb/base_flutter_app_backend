@@ -1,7 +1,7 @@
-package at.gleb.reviewmagic.companies
+package at.gleb.cupcloud.companies
 
-import at.gleb.reviewmagic.auth.AUTH_JWT
-import at.gleb.reviewmagic.auth.user
+import at.gleb.cupcloud.auth.AUTH_JWT
+import at.gleb.cupcloud.auth.user
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*

@@ -1,4 +1,4 @@
-package at.gleb.reviewmagic.utils
+package at.gleb.cupcloud.utils
 
 import java.math.BigInteger
 import java.security.MessageDigest

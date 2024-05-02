@@ -1,9 +1,9 @@
-package at.gleb.reviewmagic.companies
+package at.gleb.cupcloud.companies
 
-import at.gleb.reviewmagic.Cols
-import at.gleb.reviewmagic.data.dto.CompanyDto
-import at.gleb.reviewmagic.data.dto.UserDto
-import at.gleb.reviewmagic.exceptions.NotFound
+import at.gleb.cupcloud.Cols
+import at.gleb.cupcloud.data.dto.CompanyDto
+import at.gleb.cupcloud.data.dto.UserDto
+import at.gleb.cupcloud.exceptions.NotFound
 import com.mongodb.client.model.Filters
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList

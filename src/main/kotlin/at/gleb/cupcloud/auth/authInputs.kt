@@ -1,4 +1,4 @@
-package at.gleb.reviewmagic.auth
+package at.gleb.cupcloud.auth
 
 
 data class LoginInput(val email: String, val password: String)

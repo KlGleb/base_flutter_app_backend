@@ -1,8 +1,8 @@
-package at.gleb.reviewmagic
+package at.gleb.cupcloud
 
 
-import at.gleb.reviewmagic.auth.AuthInteractor
-import at.gleb.reviewmagic.auth.UserDataSource
+import at.gleb.cupcloud.auth.AuthInteractor
+import at.gleb.cupcloud.auth.UserDataSource
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.turbo.MarkerFilter

@@ -1,6 +1,6 @@
-package at.gleb.reviewmagic.companies
+package at.gleb.cupcloud.companies
 
-import at.gleb.reviewmagic.data.dto.CompanyDto
+import at.gleb.cupcloud.data.dto.CompanyDto
 
 data class CompanyVo(
     val id: String,

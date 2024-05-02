@@ -1,4 +1,4 @@
-package at.gleb.reviewmagic.data.dto
+package at.gleb.cupcloud.data.dto
 
 data class QrCodeDto(
     val nane: String = "",

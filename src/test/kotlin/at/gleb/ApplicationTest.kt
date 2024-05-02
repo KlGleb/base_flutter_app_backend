@@ -1,9 +1,9 @@
 package at.gleb
 
-import at.gleb.reviewmagic.Cols
-import at.gleb.reviewmagic.data.dto.UserDto
-import at.gleb.reviewmagic.utils.getRandomString
-import at.gleb.reviewmagic.utils.hashPassword
+import at.gleb.cupcloud.Cols
+import at.gleb.cupcloud.data.dto.UserDto
+import at.gleb.cupcloud.utils.getRandomString
+import at.gleb.cupcloud.utils.hashPassword
 import com.google.gson.Gson
 import com.mongodb.client.model.Filters
 import io.ktor.client.request.*

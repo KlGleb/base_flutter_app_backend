@@ -1,11 +1,11 @@
-package at.gleb.reviewmagic.auth
+package at.gleb.cupcloud.auth
 
-import at.gleb.reviewmagic.data.dto.UserDto
-import at.gleb.reviewmagic.exceptions.EmailIsAlreadyRegisteredException
-import at.gleb.reviewmagic.exceptions.EmailNotRegistered
-import at.gleb.reviewmagic.exceptions.WrongCode
-import at.gleb.reviewmagic.exceptions.WrongCredentialsException
-import at.gleb.reviewmagic.utils.hashPassword
+import at.gleb.cupcloud.data.dto.UserDto
+import at.gleb.cupcloud.exceptions.EmailIsAlreadyRegisteredException
+import at.gleb.cupcloud.exceptions.EmailNotRegistered
+import at.gleb.cupcloud.exceptions.WrongCode
+import at.gleb.cupcloud.exceptions.WrongCredentialsException
+import at.gleb.cupcloud.utils.hashPassword
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.jetbrains.annotations.VisibleForTesting

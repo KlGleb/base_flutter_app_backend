@@ -1,4 +1,4 @@
-package at.gleb.reviewmagic.exceptions
+package at.gleb.cupcloud.exceptions
 
 import io.ktor.http.*
 

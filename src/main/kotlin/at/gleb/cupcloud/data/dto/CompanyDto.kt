@@ -1,4 +1,4 @@
-package at.gleb.reviewmagic.data.dto
+package at.gleb.cupcloud.data.dto
 
 data class CompanyDto(
     val _id: String? = null,

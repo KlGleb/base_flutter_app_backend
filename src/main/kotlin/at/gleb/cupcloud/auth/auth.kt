@@ -1,7 +1,7 @@
-package at.gleb.reviewmagic.auth
+package at.gleb.cupcloud.auth
 
-import at.gleb.reviewmagic.Cols
-import at.gleb.reviewmagic.data.dto.UserDto
+import at.gleb.cupcloud.Cols
+import at.gleb.cupcloud.data.dto.UserDto
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.mongodb.client.model.Filters
