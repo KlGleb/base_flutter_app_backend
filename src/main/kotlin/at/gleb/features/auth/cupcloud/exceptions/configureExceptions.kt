@@ -1,4 +1,4 @@
-package at.gleb.cupcloud.exceptions
+package at.gleb.features.auth.cupcloud.exceptions
 
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -2,6 +2,7 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val koin_version = "3.3.3"
+val kgraphql_version = "0.19.0"
 
 plugins {
     kotlin("jvm") version "1.9.10"
@@ -43,6 +44,8 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
     implementation("io.ktor:ktor-serialization-gson:$ktor_version")
     implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("com.apurebase:kgraphql:$kgraphql_version")
+    implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
 
     // Koin for Ktor
     implementation("io.insert-koin:koin-ktor:3.3.1")

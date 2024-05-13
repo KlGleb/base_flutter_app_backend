@@ -1,34 +1,44 @@
-package at.gleb.cupcloud.auth
+package at.gleb.auth
 
-import at.gleb.cupcloud.data.dto.UserDto
-import at.gleb.cupcloud.exceptions.EmailIsAlreadyRegisteredException
-import at.gleb.cupcloud.exceptions.EmailNotRegistered
-import at.gleb.cupcloud.exceptions.WrongCode
-import at.gleb.cupcloud.exceptions.WrongCredentialsException
-import at.gleb.cupcloud.utils.hashPassword
+import at.gleb.features.auth.cupcloud.exceptions.*
+import at.gleb.features.auth.cupcloud.utils.hashPassword
+import at.gleb.features.user.data.UserDataSource
+import at.gleb.features.user.data.UserDto
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.exceptions.TokenExpiredException
 import org.jetbrains.annotations.VisibleForTesting
 import java.util.*
 
 const val ACCESS_TOKEN_EXPIRES_TIME_MILLS = 1000 * 60 * 60 * 24 * 7 //7 days
-const val EMAIL_CODE_EXPIRES_TIME_MILLS = 1000 * 60 * 60 * 24 * 7 //7 days
+const val EMAIL_CODE_EXPIRES_TIME_MILLS = 1000 * 60 * 5 //5 min
 
 class AuthInteractor(private val userDataSource: UserDataSource) {
 
-    suspend fun register(registerInput: RegisterInput, audience: String, issuer: String, secret: String): String {
-        if (userDataSource.getByEmail(registerInput.email) != null) {
-            throw EmailIsAlreadyRegisteredException("Email ${registerInput.email} is already signed up")
+    suspend fun register(email: String, password: String, audience: String, issuer: String, secret: String): String {
+        if (userDataSource.getByEmail(email) != null) {
+            throw EmailIsAlreadyRegisteredException("Email $email is already signed up")
         }
 
-        val userDto = UserDto(email = registerInput.email, password = registerInput.password.hashPassword())
+        val userDto = UserDto(email = email, password = password.hashPassword())
         userDataSource.add(userDto)
 
-        return createToken(registerInput.email, registerInput.password, audience, issuer, secret)
+        return createToken(email, password, audience, issuer, secret)
     }
 
-    suspend fun provideToken(loginInput: LoginInput, audience: String, issuer: String, secret: String): String =
-        createToken(loginInput.email, loginInput.password, audience, issuer, secret)
+    suspend fun provideToken(
+        email: String,
+        password: String,
+        audience: String,
+        issuer: String,
+        secret: String
+    ): String = createToken(email, password, audience, issuer, secret)
+
+    suspend fun sendResetPasswordCode(email: String, audience: String, issuer: String, secret: String) {
+        val token = createResetPasswordToken(email, audience, issuer, secret)
+        val code = userDataSource.addResetPasswordCode(email, token)
+        println("code: $code")
+    }
 
     private suspend fun createToken(
         email: String,
@@ -98,34 +108,35 @@ class AuthInteractor(private val userDataSource: UserDataSource) {
             if (emailFromToken.isEmpty()) throw WrongCode()
 
             return emailFromToken
+        } catch (e: TokenExpiredException) {
+            throw CodeExpired()
         } catch (e: Exception) {
             throw WrongCode()
         }
     }
 
-    suspend fun sendResetPasswordCode(email: String, audience: String, issuer: String, secret: String) {
-        val token = createResetPasswordToken(email, audience, issuer, secret)
-        //todo: send email with token
-        println("http://0.0.0.0:8080/resetPassword?code=$token")
-    }
-
     suspend fun resetPassword(
-        resetPasswordInput: ResetPasswordInput,
+        email: String,
+        newPassword: String,
+        code: String,
         audience: String,
         issuer: String,
         secret: String
     ): String {
-        val email = validateResetPasswordToken(resetPasswordInput.code, audience, issuer, secret)
-        val newPassword = resetPasswordInput.newPassword.hashPassword()
-        userDataSource.setPassword(email, newPassword)
+        val codeDto = userDataSource.getByEmail(email)?.resetPasswordCode ?: throw NotFound()
+        if (codeDto.key != code) throw WrongCode()
+
+        validateResetPasswordToken(codeDto.token, audience, issuer, secret)
+        val passHashed = newPassword.hashPassword()
+        userDataSource.setPassword(email, passHashed)
         return provideToken(
-            LoginInput(email, resetPasswordInput.newPassword),
+            email,
+            newPassword,
             audience,
             issuer,
             secret
         )
     }
-
 
 }
 

@@ -1,8 +1,10 @@
-package at.gleb.cupcloud
+package at.gleb.features.auth.cupcloud
 
 
-import at.gleb.cupcloud.auth.AuthInteractor
-import at.gleb.cupcloud.auth.UserDataSource
+import at.gleb.auth.AuthInteractor
+import at.gleb.features.user.data.UserDataSource
+import at.gleb.features.user.data.UserRepositoryImpl
+import at.gleb.features.user.domain.UserRepository
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
 import ch.qos.logback.classic.turbo.MarkerFilter
@@ -44,6 +46,10 @@ fun Application.appModule(): Module {
             UserDataSource(get())
         }
 
+        single<UserRepository> {
+            UserRepositoryImpl(get())
+        }
+
         single {
             AuthInteractor(get())
         }
@@ -68,8 +74,9 @@ fun Application.appModule(): Module {
 
 fun Application.getEnv(name: String) = environment.config.propertyOrNull(name)?.getString()!!
 
-
-fun Application.checkIsDev() = if (!isDev()) throw Exception() else {
+@Suppress("unused")
+fun Application.checkIsDev() {
+    if (!isDev()) throw Exception()
 }
 
 fun Application.isDev(): Boolean {

@@ -2,7 +2,7 @@ ktor:
   development: true
   deployment:
     port: "$PORT:8080"
-
+    sslPort: "$PORT:8443"
   application:
     modules:
       - at.gleb.ApplicationKt.module
@@ -19,4 +19,10 @@ ktor:
     issuer: "$JWT_ISSUER:http://0.0.0.0:8080/"
     audience: "$JWT_AUDIENCE:http://0.0.0.0:8080/hello"
     realm: "$JWT_REALM:Access to client console"
+  security:
+    ssl:
+      keyStore: test.jks
+      keyAlias: testkey
+      keyStorePassword: foobar
+      privateKeyPassword: foobar
 

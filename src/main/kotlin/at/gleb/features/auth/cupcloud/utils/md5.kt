@@ -1,4 +1,4 @@
-package at.gleb.cupcloud.utils
+package at.gleb.features.auth.cupcloud.utils
 
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -25,15 +25,4 @@ fun getRandomString(length: Int): String {
     return (1..length)
         .map { allowedChars.random() }
         .joinToString("")
-}
-
-fun getRandomCode(): String {
-    val p1 = "aeio"
-    val p2 = "bcdfghklmnpqrstvxz"
-    val nums = "01234567890"
-
-    return p2.random().toString() + p1.random().toString() + p2.random().toString() + p1.random()
-        .toString() + p2.random().toString() + p1.random().toString() + nums.random().toString() + nums.random()
-        .toString() + nums.random()
-        .toString()
 }

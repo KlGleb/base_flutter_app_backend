@@ -1,9 +1,9 @@
 package at.gleb
 
-import at.gleb.cupcloud.Cols
-import at.gleb.cupcloud.data.dto.UserDto
-import at.gleb.cupcloud.utils.getRandomString
-import at.gleb.cupcloud.utils.hashPassword
+import at.gleb.features.auth.cupcloud.Cols
+import at.gleb.features.auth.cupcloud.utils.getRandomString
+import at.gleb.features.auth.cupcloud.utils.hashPassword
+import at.gleb.features.user.data.UserDto
 import com.google.gson.Gson
 import com.mongodb.client.model.Filters
 import io.ktor.client.request.*

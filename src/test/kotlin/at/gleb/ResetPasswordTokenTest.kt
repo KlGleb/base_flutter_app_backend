@@ -1,12 +1,11 @@
 package at.gleb
 
-import at.gleb.cupcloud.Cols
-import at.gleb.cupcloud.auth.AuthInteractor
-import at.gleb.cupcloud.auth.LoginInput
-import at.gleb.cupcloud.auth.UserDataSource
-import at.gleb.cupcloud.data.dto.UserDto
-import at.gleb.cupcloud.exceptions.WrongCode
-import at.gleb.cupcloud.utils.hashPassword
+import at.gleb.auth.AuthInteractor
+import at.gleb.features.auth.cupcloud.Cols
+import at.gleb.features.auth.cupcloud.exceptions.WrongCode
+import at.gleb.features.auth.cupcloud.utils.hashPassword
+import at.gleb.features.user.data.UserDataSource
+import at.gleb.features.user.data.UserDto
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import io.ktor.server.testing.*
 import io.mockk.coEvery
@@ -72,7 +71,7 @@ class ResetPasswordTests {
     fun `validateResetPasswordToken should not pass with access token`() = testApplication {
         application {
             runBlocking {
-                val token = interactor.provideToken(LoginInput(email, ""), audience, issuer, secret)
+                val token = interactor.provideToken(email, "", audience, issuer, secret)
 
                 assertThrows(WrongCode::class.java) {
                     interactor.validateResetPasswordToken(token, audience, issuer, secret)

@@ -1,8 +1,6 @@
-package at.gleb.cupcloud
+package at.gleb.features.auth.cupcloud
 
-import at.gleb.cupcloud.data.dto.CompanyDto
-import at.gleb.cupcloud.data.dto.QrCodeDto
-import at.gleb.cupcloud.data.dto.UserDto
+import at.gleb.features.user.data.UserDto
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
 import com.mongodb.kotlin.client.coroutine.MongoCollection
@@ -13,8 +11,6 @@ import kotlin.reflect.KProperty
 
 class Cols(private val db: MongoDatabase) {
     val users by lazy { db.getCollection<UserDto>("users") }
-    val companies by lazy { db.getCollection<CompanyDto>("companies") }
-    val qrs by lazy { db.getCollection<QrCodeDto>("companies") }
 
     init {
         runBlocking {
@@ -24,8 +20,6 @@ class Cols(private val db: MongoDatabase) {
 
     private suspend fun ensureIndexes() {
         users.createUniqueIndex(UserDto::email)
-        companies.createIndex(Indexes.ascending(CompanyDto::userId.name))
-        qrs.createIndex(Indexes.ascending(QrCodeDto::companyId.name))
     }
 }
 
