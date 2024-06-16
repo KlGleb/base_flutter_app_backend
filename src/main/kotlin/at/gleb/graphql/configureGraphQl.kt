@@ -10,12 +10,15 @@ import com.apurebase.kgraphql.GraphQL
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.plugins.doublereceive.*
 import org.koin.java.KoinJavaComponent
 
 private val repository: UserRepository by KoinJavaComponent.inject(UserRepository::class.java)
 
 fun Application.configureGraphQl() {
+    install(DoubleReceive)
     install(GraphQL) {
+
         schema {
             // prints the graphql response in a pretty json format
             configure {

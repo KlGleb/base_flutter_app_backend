@@ -1,13 +1,15 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
-val koin_version = "3.3.3"
+val koin_version = "3.6.0"
 val kgraphql_version = "0.19.0"
 
 plugins {
     kotlin("jvm") version "1.9.10"
     id("io.ktor.plugin") version "2.3.5"
 }
+
+
 
 group = "at.gleb"
 version = "0.0.1"
@@ -38,7 +40,6 @@ dependencies {
     implementation("io.ktor:ktor-server-default-headers-jvm")
     implementation("io.ktor:ktor-server-cors-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
@@ -47,6 +48,15 @@ dependencies {
     implementation("com.apurebase:kgraphql:$kgraphql_version")
     implementation("com.apurebase:kgraphql-ktor:$kgraphql_version")
 
+    //logging and metrics
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
+    implementation("io.ktor:ktor-server-call-id:$ktor_version")
+    implementation("io.ktor:ktor-server-metrics:$ktor_version")
+    implementation("io.ktor:ktor-server-double-receive:$ktor_version")
+    implementation("io.ktor:ktor-server-forwarded-header:$ktor_version")
+
     // Koin for Ktor
     implementation("io.insert-koin:koin-ktor:3.3.1")
 
@@ -54,11 +64,11 @@ dependencies {
 
 
     testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+//    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     testImplementation("org.testng:testng:7.7.0")
     // Koin testing tools
-    testImplementation("io.insert-koin:koin-test:$koin_version")
+//    testImplementation("io.insert-koin:koin-test:$koin_version")
     // Needed JUnit version
-    testImplementation("io.insert-koin:koin-test-junit4:$koin_version")
+//    testImplementation("io.insert-koin:koin-test-junit4:$koin_version")
     testImplementation("io.mockk:mockk:1.13.8")
 }

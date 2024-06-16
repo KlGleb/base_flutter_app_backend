@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  cleanhub:
+    container_name: cleanhub
+    build:
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    restart: always
+    expose:
+      - 8080
+    networks:
+      - app-network
+  nginx:
+    container_name: nginx
+    image: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt/:/etc/letsencrypt/
+    depends_on:
+      - cleanhub
+    networks:
+      - app-network
+networks:
+  app-network:

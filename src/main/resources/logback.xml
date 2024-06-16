@@ -1,12 +1,70 @@
-<configuration>
+<configuration debug="true" scan="true" scanPeriod="10 minutes">
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="trace">
+
+    <appender name="DAILY_APP_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/applogs.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>applogs.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%green(example-project) - %cyan(%date [%thread] %-5level %logger{36}) - %message :
+                %magenta([DEVICE_ID=%X{device_id}] [DEVICE_NAME=%X{device_name}] [DEVICE_OS=%X{device_os}]
+                [APP_VER=%X{app_version}] [DEVICE_LANG=%X{device_language}] [IP=%X{ip}] [PORT=%X{port}]
+                [USER_AGENT=%X{user_agent}] [AUTH=%X{auth}] [TX_ID=%X{tx_id}] [CLIENT_ID=%X{client_id}]%n)
+            </pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:50000</destination>
+        <!-- You can add multiple destination values -->
+        <!--        <destination>100.100.10.100:55525</destination>
+                <destination>100.100.10.101:55525</destination>       -->
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp/>
+                <version/> <!-- Logstash json format version, the @version field in the output-->
+                <mdc/> <!-- MDC variables on the Thread will be written as JSON fields-->
+                <context/> <!--Outputs entries from logback's context -->
+                <logLevel/>
+                <loggerName/>
+                <!--                <pattern> &lt;!&ndash; we can add some custom fields to be sent with all the log entries. make filtering easier in Logstash&ndash;&gt;-->
+                <!--                    <pattern>-->
+                <!--                        {-->
+                <!--                        "appName": "example-project"-->
+                <!--                        }-->
+                <!--                    </pattern>-->
+                <!--                </pattern>-->
+                <threadName/>
+                <message/>
+                <logstashMarkers/> <!-- Useful so we can add extra information for specific log lines as Markers-->
+                <arguments/> <!--or through StructuredArguments-->
+                <stackTrace/>
+            </providers>
+        </encoder>
+    </appender>
+
+
+    <logger name="org.mongodb.driver.authenticator" level="OFF" additivity="true"/>
+    <logger name="org.mongodb.driver.client" level="INFO" additivity="true"/>
+    <logger name="org.mongodb.driver.cluster" level="INFO" additivity="true"/>
+    <logger name="org.mongodb.driver.connection" level="WARN" additivity="true"/>
+    <logger name="org.mongodb.driver.connection.tls" level="WARN" additivity="true"/>
+    <logger name="org.mongodb.driver.operation" level="INFO" additivity="true"/>
+    <logger name="org.mongodb.driver.protocol" level="ALL" additivity="true"/>
+    <logger name="org.mongodb.driver.uri" level="WARN" additivity="true"/>
+    <logger name="org.mongodb.driver.management" level="WARN" additivity="true"/>
+
+    <root level="TRACE">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STASH"/>
+        <appender-ref ref="DAILY_APP_LOG_FILE"/>
     </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="io.netty" level="INFO"/>
+
 </configuration>

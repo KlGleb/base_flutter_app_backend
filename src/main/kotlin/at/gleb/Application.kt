@@ -5,9 +5,11 @@ import at.gleb.features.auth.cupcloud.appModule
 import at.gleb.features.auth.cupcloud.exceptions.configureExceptions
 import at.gleb.graphql.configureGraphQl
 import at.gleb.plugins.configureHTTP
+import at.gleb.plugins.configureLogs
 import at.gleb.plugins.configureSerialization
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.callloging.*
 import org.koin.ktor.plugin.Koin
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
@@ -22,4 +24,5 @@ fun Application.module() {
     configureAuth()
     configureExceptions()
     configureGraphQl()
+    configureLogs()
 }
