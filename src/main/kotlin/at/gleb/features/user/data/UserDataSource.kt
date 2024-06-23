@@ -21,6 +21,15 @@ class UserDataSource(private val cols: Cols) {
         return res.modifiedCount == 1L
     }
 
+    /*  suspend fun confirmEmail(email: String): Boolean {
+          val res =
+              cols.users.updateOne(
+                  Filters.eq(UserDto::email.name, email),
+                  Updates.set(UserDto::emailConfirmed.name, true)
+              )
+          return res.modifiedCount == 1L
+      }*/
+
     suspend fun getAll(): List<UserDto> = cols.users.find<UserDto>().toList()
 
     suspend fun addResetPasswordCode(email: String, token: String): String {
@@ -29,6 +38,16 @@ class UserDataSource(private val cols: Cols) {
         cols.users.updateOne(
             Filters.eq(UserDto::email.name, email),
             Updates.set(UserDto::resetPasswordCode.name, codeDto)
+        )
+        return code
+    }
+
+    suspend fun addConfirmEmailCode(email: String, token: String): String {
+        val code = getRandomString()
+        val codeDto = OneTimeCodeDto(token = token, key = code)
+        cols.users.updateOne(
+            Filters.eq(UserDto::email.name, email),
+            Updates.set(UserDto::confirmEmailCode.name, codeDto)
         )
         return code
     }

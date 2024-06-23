@@ -57,6 +57,12 @@ dependencies {
     implementation("io.ktor:ktor-server-double-receive:$ktor_version")
     implementation("io.ktor:ktor-server-forwarded-header:$ktor_version")
 
+    //mail notifications
+    implementation("org.simplejavamail:simple-java-mail:8.11.2")
+
+    //firebase admin SDK https://firebase.google.com/docs/admin/setup#java
+    implementation("com.google.firebase:firebase-admin:9.3.0")
+
     // Koin for Ktor
     implementation("io.insert-koin:koin-ktor:3.3.1")
 

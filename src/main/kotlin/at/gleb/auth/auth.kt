@@ -56,8 +56,8 @@ fun SchemaBuilder.confAuth(environment: ApplicationEnvironment) {
     val audience = environment.config.property("ktor.jwt.audience").getString()
 
     query("auth") {
-        resolver { email: String, password: String ->
-            interactor.provideToken(email, password, audience, issuer, secret)
+        resolver { email: String, password: String, confirmCode: String? ->
+            interactor.provideToken(email, password, audience, issuer, secret, confirmCode)
         }
     }
 
@@ -71,6 +71,12 @@ fun SchemaBuilder.confAuth(environment: ApplicationEnvironment) {
         resolver { email: String ->
             interactor.sendResetPasswordCode(email, audience, issuer, secret)
             true
+        }
+    }
+
+    query("sendConfirmEmailCode") {
+        resolver { email: String ->
+            interactor.sendConfirmEmailCode(email, audience, issuer, secret)
         }
     }
 

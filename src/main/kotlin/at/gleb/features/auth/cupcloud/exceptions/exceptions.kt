@@ -37,6 +37,7 @@ object ErrorCodes {
     const val UNKNOWN = "unknown"
     const val WRONG_CREDENTIALS = "wrong_credentials"
     const val EMAIL_ALREADY_REGISTERED = "email_is_already_registered"
+    const val EMAIL_NOT_CONFIRMED = "email_not_confirmed"
     const val USER_NOT_FOUND = "user_not_found"
     const val CODE_NOT_EXISTS = "code_not_exists"
     const val EMAIL_NOT_REGISTERED = "email_not_registered"
@@ -62,6 +63,9 @@ class WrongCredentialsException() :
 class ValidationException(message: String, code: String) : MyException(message, code, HttpStatusCode.BadRequest)
 class EmailIsAlreadyRegisteredException(message: String) :
     MyException(message, ErrorCodes.EMAIL_ALREADY_REGISTERED, HttpStatusCode.Unauthorized)
+
+class EmailIsNotConfirmedException() :
+    MyException("Email is not confirmed", ErrorCodes.EMAIL_NOT_CONFIRMED, HttpStatusCode.Unauthorized)
 
 @Suppress("unused")
 class UserNotFountException(message: String = "User not found") :
