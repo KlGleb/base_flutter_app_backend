@@ -9,9 +9,7 @@ import org.bson.types.ObjectId
 
 class UserDataSource(private val cols: Cols) {
     suspend fun getById(id: String) = cols.users.find(Filters.eq("_id", ObjectId(id))).firstOrNull()
-    suspend fun add(userDto: UserDto) {
-        cols.users.insertOne(userDto)
-    }
+    suspend fun add(userDto: UserDto) = cols.users.insertOne(userDto)
 
     suspend fun getByEmail(email: String) = cols.users.find(Filters.eq(UserDto::email.name, email)).firstOrNull()
 
